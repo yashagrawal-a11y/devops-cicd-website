@@ -33,15 +33,21 @@ jobs:
           cp index.html style.css script.js dist/
           echo "Build completed"
 
-      - name: Debug OIDC
-        run: |
-          echo "========== OIDC DEBUG =========="
-          echo "Repository: $GITHUB_REPOSITORY"
-          echo "Ref: $GITHUB_REF"
-          echo "Branch: $GITHUB_REF_NAME"
-          echo "Event: $GITHUB_EVENT_NAME"
-          echo "==============================="
-          echo "Debug step executed"
+      - name: Debug OIDC Token
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const token = await core.getIDToken('sts.amazonaws.com');
+            const payload = JSON.parse(
+              Buffer.from(token.split('.')[1], 'base64url').toString()
+            );
+
+            console.log("OIDC issuer:", payload.iss);
+            console.log("OIDC audience:", payload.aud);
+            console.log("OIDC subject:", payload.sub);
+            console.log("Repository:", payload.repository);
+            console.log("Ref:", payload.ref);
+            console.log("Event:", payload.event_name);
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
