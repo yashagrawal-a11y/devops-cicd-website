@@ -1,3 +1,4 @@
+```yaml
 name: Deploy Website
 
 on:
@@ -33,6 +34,12 @@ jobs:
           cp index.html style.css script.js dist/
           echo "Build completed"
 
+      - name: Debug OIDC
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Ref: $GITHUB_REF"
+          echo "Branch: $GITHUB_REF_NAME"
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -43,3 +50,4 @@ jobs:
         run: |
           aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }} --delete
           echo "Deployment completed successfully"
+```
