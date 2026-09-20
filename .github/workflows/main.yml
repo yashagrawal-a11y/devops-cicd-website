@@ -41,6 +41,7 @@ jobs:
           echo "Branch: $GITHUB_REF_NAME"
           echo "Event: $GITHUB_EVENT_NAME"
           echo "==============================="
+          echo "Debug step executed"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
